@@ -1,19 +1,51 @@
 import React from "react";
-import Header from "./Components/Header/Header";
 import Body from "./Components/Body/Body";
+import { createBrowserRouter } from "react-router-dom";
+import About from "./Pages/About";
+import Contact from "./Pages/Contact";
+import Error from "./Pages/Error";
+import Layout from "./Layout/Layout";
+import RestMenuPage from "./Pages/RestMenuPage";
 
-const App = () => {
+const App = () => { 
   return (
     <div className="app ">
 
-{/* Ye remove krna h render krne k liye kiya h use  */}
-       <Header /> 
-
-{/* Remove krna h body baad m */}
-     <Body />
+     <Layout />
 
     </div>
   )
 }
 
-export default App
+// routing configuration
+
+const appRouter = createBrowserRouter([
+  {
+    path : "/",
+    element: < App />,
+
+    children : [
+      {
+        path: "/",
+        element : <Body />
+      },
+      {
+        path : "/about",
+        element: <About />
+      },
+      {
+        path: "/contact",
+        element: <Contact />
+      },
+      {
+        path : "/restaurants/:resId",
+        element:  <RestMenuPage /> 
+      },
+    ],
+
+    errorElement : <Error /> 
+  },
+  
+]);
+
+export default appRouter;
