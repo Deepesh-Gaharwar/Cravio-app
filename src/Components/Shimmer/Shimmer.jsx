@@ -22,6 +22,7 @@ const Shimmer = () => {
               <div className="w-10 h-3 bg-gray-300 rounded shimmer-bg" /> {/* Time */}
             </div>
           </div>
+          
         </div>
       ))}
     </div>

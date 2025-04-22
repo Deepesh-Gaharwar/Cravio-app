@@ -1,10 +1,11 @@
 import React from 'react'
 import RestCard from '../RestCard/RestCard'
 import { useState,useEffect} from 'react';
-// import resList from '../../utils/mockData'
 import { API_URL } from '../../utils/constant';
 import Shimmer from '../Shimmer/Shimmer';
 import { Link } from 'react-router-dom';
+import useOnlineStatus from '../../utils/useOnlineStatus';
+// import PromotedRestCards from '../PromotedRestCards.jsx/PromotedRestCards';
 
 
 const Body = () => {
@@ -14,33 +15,50 @@ const Body = () => {
   
   const [searchText,setSearchText] = useState("");
 
- 
-// we have to remove this after learning and exploring things out
+  // const PromotedRest = PromotedRestCards(RestCard);
 
  useEffect(() => {
-  console.log("useEffect is called");
   fetchData(); 
 
  }, [] );
 
- const fetchData =async () => {
-  const data = await fetch(API_URL) ; // api url 
+ const fetchData = async () => {
+  try {
+    const data = await fetch(API_URL); // API URl
+    const json = await data.json();
 
-  const json = await data.json(); 
+    const restaurants = json?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
 
-  setListOfRest(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);  
-  setFilteredRest(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+    setListOfRest(restaurants);
+    setFilteredRest(restaurants);
+  } catch (error) {
+    console.error("Failed to fetch restaurants", error);
+    setListOfRest([]);
+    setFilteredRest([]);
+  }
+};
 
- };
+
+// online status check  
+
+const onlineStatus = useOnlineStatus();
+
+if (onlineStatus === false) {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 text-center">
+      <h1 className="text-4xl font-bold text-red-600 mb-4">
+        Looks like you're offline !!!
+      </h1>
+      <h2 className="text-xl text-gray-700">
+        Please check your internet connection
+      </h2>
+    </div>
+  );
+}
 
 
-
-// loader screen load => this will be seen before the actual page loads 
-// if(listOfRest.length == 0){ // conditional  rendering
-//   return <Shimmer /> 
-// }
  
-  return listOfRest == 0 ?  <Shimmer /> :
+  return listOfRest.length == 0 ?  <Shimmer /> :
     (
     <div className='body'>
 
@@ -88,7 +106,21 @@ const Body = () => {
           
           {/* Restaurant card component*/}
           { filteredRest.map((res) => (
-           <Link key={res.info.id}  to={"/restaurants/" + res.info.id}> <RestCard  resData={res} />   </Link> 
+              
+           <Link 
+                 key={res.info.id}  to={"/restaurants/" + res.info.id}> 
+
+                 { /*if the restaurant is promoted then add a promoted label to it   
+                 
+                   res.data.promoted ? <PromotedRest resData = {res} /> : <RestCard  resData={res} />
+                  
+                   */
+                 } 
+
+                    <RestCard  resData={res} />
+
+           </Link> 
+
             ))
           } 
           

@@ -13,9 +13,9 @@ const Contact = () => {
         <div className="bg-white rounded-lg shadow-md p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Contact Info */}
           <div className="text-gray-700 text-sm space-y-3">
-            <p><strong>📍 Address:</strong> 123 Flavor Street, Foodville</p>
+            <p><strong>📍 Address:</strong> 12/3 Flavor Street, Foodville</p>
             <p><strong>📞 Phone:</strong> +91 9876543210</p>
-            <p><strong>✉️ Email:</strong> support@craviofoodie.com</p>
+            <p><strong>✉️ Email:</strong> support@cravio.com</p>
             <p>
               We’re available <strong>Mon to Sat</strong>, <strong>9:00 AM – 9:00 PM</strong>. Reach out anytime!
             </p>

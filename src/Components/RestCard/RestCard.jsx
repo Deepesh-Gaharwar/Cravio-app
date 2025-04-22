@@ -5,7 +5,6 @@ const RestCard = ({resData}) => {
    // destructuring / optional chanioning if possible in resData
 
     const {
-        
         name,
         avgRating,
         cuisines,
