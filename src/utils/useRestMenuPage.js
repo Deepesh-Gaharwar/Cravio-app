@@ -10,25 +10,30 @@ const useRestMenuPage = (resId) => {
     // fetchData
 
     useEffect(() => {
+
+            const fetchData = async () => {
+            try {
+                const data = await fetch(MENU_API_URL(resId));
+                const json = await data.json();
+                setResInfo(json.data);
+    
+                console.log("resInfo",resInfo);
+                
+            } catch (err) {
+                console.error("Failed to fetch menu:", err);
+                setResInfo(null);
+            }
+        }    
+
         fetchData();
 
     },[resId]);
 
-    const fetchData = async () => {
-        try {
-            const data = await fetch(MENU_API_URL(resId));
-            const json = await data.json();
-            setResInfo(json.data);
-            
-        } catch (err) {
-            console.error("Failed to fetch menu:", err);
-            setResInfo(null);
-        }
-    };
+    
     
   
 
     return resInfo;
 }
 
-export default useRestMenuPage
+export default useRestMenuPage;

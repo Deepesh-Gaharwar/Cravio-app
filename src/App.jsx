@@ -7,6 +7,9 @@ import Error from "./Pages/Error";
 import Layout from "./Layout/Layout";
 import RestMenuPage from "./Pages/RestMenuPage";
 // import Grocery from "./Components/Grocery/Grocery";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
+import Cart from "./Pages/Cart";
  
 // lazy loading 
  const Grocery = lazy( () => import("./Components/Grocery/Grocery"));  // dynamic import 
@@ -14,11 +17,16 @@ import RestMenuPage from "./Pages/RestMenuPage";
 
 const App = () => { 
   return (
-    <div className="app ">
 
-     <Layout />
+   <Provider store={appStore} >
+      <div className="app ">
 
-    </div>
+        <Layout />
+         
+
+      </div>
+
+    </Provider>
   )
 }
 
@@ -29,7 +37,7 @@ const App = () => {
 const appRouter = createBrowserRouter([
   {
     path : "/",
-    element: < App />,
+    element: < App />, 
 
     children : [
       {
@@ -51,6 +59,10 @@ const appRouter = createBrowserRouter([
       {
         path : "/restaurants/:resId",
         element:  <RestMenuPage /> 
+      },
+      {
+        path : "/cart",
+        element:  <Cart /> 
       },
     ],
 

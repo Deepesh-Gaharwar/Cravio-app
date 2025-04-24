@@ -3,6 +3,7 @@ import { LOGO_URL } from '../../utils/constant'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useOnlineStatus from '../../utils/useOnlineStatus';
+import { useSelector } from 'react-redux';
 // import UserContext from '../../utils/UserContext';
 
 
@@ -18,8 +19,11 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // const {loggedInUser} = useContext(UserContext) ;
-  
 
+  // selector used to subscribe to the store  
+  const cartItems = useSelector(store => store?.cart?.items) ;
+
+  console.log("cartItems ",cartItems);
 
   return (
     <div className='header sticky top-0 z-50 flex items-center justify-between px-4 md:px-8 py-4 shadow-md bg-gradient-to-r from-white to-gray-50 '>
@@ -44,10 +48,10 @@ const Header = () => {
       
       {/* Navigation - Hidden on small screens unless menu is open */}
       <div 
-        className={`nav-items fixed top-0 right-0 h-auto max-h-screen w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out rounded-l-2xl lg:static lg:h-auto lg:w-auto lg:bg-transparent lg:shadow-none lg:transform-none ${
+        className={`nav-items fixed top-0 right-0 h-screen w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out rounded-l-2xl lg:static lg:h-auto lg:w-auto lg:bg-transparent lg:shadow-none lg:transform-none ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0 '
         }`}
-      >
+      > 
         {/* Close button for mobile menu */}
         <button
           className='lg:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-700 cursor-pointer'
@@ -69,9 +73,23 @@ const Header = () => {
           <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact Us</Link>
           </li>
+
           <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
-            <Link onClick={() => setMobileMenuOpen(false)}>Cart</Link>
+              <Link 
+                to="/cart" 
+                onClick={() => setMobileMenuOpen(false)}
+                className="relative inline-flex items-center"
+              >
+                Cart
+                {cartItems?.length > 0 && (
+                  <span className="ml-1.5 bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full min-w-[20px] text-center">
+                    {cartItems.length}
+                  </span>
+                )}
+              </Link>
+
           </li>
+
           <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
             <Link to="/grocery" onClick={() => setMobileMenuOpen(false)}>Grocery</Link>
           </li>

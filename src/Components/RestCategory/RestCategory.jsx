@@ -27,10 +27,10 @@ const RestCategory = ({ data }) => {
           >
             <div className="flex items-center">
               <span className="font-medium text-lg text-gray-800">
-                {category.card.card.title}
+                {category?.card?.card?.title}
               </span>
               <span className="ml-2 px-2 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">
-                {data.length || 0}
+                {data?.length || 0}
               </span>
             </div>
             <span className={`text-blue-500 transition-transform duration-300 ${openIndex === index ? "rotate-180" : ""}`}>

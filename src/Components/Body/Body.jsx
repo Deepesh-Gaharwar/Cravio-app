@@ -27,10 +27,21 @@ const Body = () => {
     const data = await fetch(API_URL); // API URl
     const json = await data.json();
 
-    const restaurants = json?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
+    // const restaurants = json?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
+
+    const cards = json?.data?.cards || [];
+
+    const restaurantCard = cards.find(
+     (card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants
+
+    );
+
+    const restaurants = restaurantCard?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
+
 
     setListOfRest(restaurants);
     setFilteredRest(restaurants);
+
   } catch (error) {
     console.error("Failed to fetch restaurants", error);
     setListOfRest([]);
@@ -71,6 +82,16 @@ if (onlineStatus === false) {
                   value={searchText}
                   onChange={(e) => {
                      setSearchText(e.target.value);
+                  }}
+              
+          // helps to searches using the enter key
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      const filteredRest = listOfRest.filter((res) => 
+                        res?.info?.name?.toLowerCase().includes(searchText.toLowerCase())
+                      );
+                      setFilteredRest(filteredRest);
+                    }
                   }}
               />
             <button 

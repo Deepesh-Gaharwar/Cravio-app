@@ -1,11 +1,29 @@
 import React from "react";
 import { IMAGE_URL } from "../../utils/constant";
+import { useDispatch } from "react-redux";
+import { addItem, removeItem } from "../../utils/cartSlice";
+import AddToCartButton from "../AddToCartButton/AddToCartButton";
 
 const ItemList = ({ items }) => {
+
+  const dispatch = useDispatch();
+
+  const handleAddItem = (item) => {
+    // Dispatch an action
+    dispatch(addItem(item));
+   
+  }
+
+  const handleRemoveItem = (item) => {
+    // dispatch an action
+    dispatch(removeItem(item));
+  }
   
   return (
     <div className="space-y-6">
       {items.map((item, index) => {
+
+        console.log("item",item)
         const info = item?.card?.info;
         const price = info?.price || info?.defaultPrice || 0;
         const imgId = info?.imageId;
@@ -32,17 +50,21 @@ const ItemList = ({ items }) => {
               </div>
             </div>
             
-            {imgURL && ( 
-              <div className="relative flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28">
-                <img
-                  src={imgURL}
-                  alt={info?.name}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-                <button className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-white text-green-600 border border-green-600 text-xs font-medium px-4 py-1 rounded-md hover:bg-green-50 transition-colors">
-                  ADD
-                </button>
-              </div>
+            {imgURL && (
+                <div className="relative flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 group">
+                    <img
+                      src={imgURL}
+                      alt={info?.name}
+                      className="w-full h-full object-cover rounded-lg shadow-sm transition-all duration-300 group-hover:shadow-md"
+                    />
+                    
+                    <AddToCartButton 
+                        item={item} 
+                        handleAddItem={handleAddItem} 
+                        handleRemoveItem={handleRemoveItem} 
+                    />
+
+                </div>
             )}
 
 
@@ -53,4 +75,4 @@ const ItemList = ({ items }) => {
   );
 };
 
-export default ItemList;
+export default ItemList
