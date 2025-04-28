@@ -17,7 +17,6 @@ const useRestMenuPage = (resId) => {
                 const json = await data.json();
                 setResInfo(json.data);
     
-                console.log("resInfo",resInfo);
                 
             } catch (err) {
                 console.error("Failed to fetch menu:", err);

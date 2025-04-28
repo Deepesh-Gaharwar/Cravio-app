@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, Instagram, Twitter,MapPin } from 'lucide-react';
+import { Facebook, Instagram, Twitter,MapPin, Phone, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -32,12 +32,22 @@ const Footer = () => {
           <div className="mb-6 md:mb-0">
             <h3 className="font-semibold mb-2 text-center md:text-left">Contact Us</h3>
             <div className="text-gray-400 leading-relaxed text-center md:text-left space-y-2">
+
               <div className="flex items-center justify-center md:justify-start gap-2">
                 <MapPin size={20} className="text-gray-400 hover:text-yellow-400 transition" />
                 <span>12/3 Flavor Street, Foodville</span>
               </div>
-              <div>📞 +91 9876543210</div>
-              <div>✉️ support@cravio.com</div>
+
+              <div className="flex items-center justify-center md:justify-start gap-2" >
+                <Phone size={20} className="text-gray-400 hover:text-yellow-400 transition" />
+                 <span> +91 9876543210 </span> 
+              </div>
+
+              <div className="flex items-center justify-center md:justify-start gap-2" >
+                <Mail size={20} className="text-gray-400 hover:text-yellow-400 transition" />
+                <span> support@cravio.com </span>
+              </div>
+
             </div>
           </div>
         

@@ -3,7 +3,8 @@ import { CDN_URL } from '../../utils/constant';
 
 const RestCard = ({resData}) => {
    // destructuring / optional chanioning if possible in resData
-
+  
+  
     const {
         name,
         avgRating,
@@ -22,7 +23,7 @@ const RestCard = ({resData}) => {
     }
 
     return (
-        <div className='group rest-card w-[260px] min-h-[370px] m-3 bg-white rounded-xl shadow-md 
+        <div data-testid="resCard" className='group rest-card w-[260px] min-h-[370px] m-3 bg-white rounded-xl shadow-md 
                         overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer 
                         hover:shadow-xl'>
     

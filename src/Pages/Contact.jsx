@@ -1,4 +1,6 @@
 import React from 'react'
+import { MapPin,Phone,Mail } from 'lucide-react';
+
 
 const Contact = () => {
   return (
@@ -12,14 +14,33 @@ const Contact = () => {
 
         <div className="bg-white rounded-lg shadow-md p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Contact Info */}
+
           <div className="text-gray-700 text-sm space-y-3">
-            <p><strong>📍 Address:</strong> 12/3 Flavor Street, Foodville</p>
-            <p><strong>📞 Phone:</strong> +91 9876543210</p>
-            <p><strong>✉️ Email:</strong> support@cravio.com</p>
-            <p>
-              We’re available <strong>Mon to Sat</strong>, <strong>9:00 AM – 9:00 PM</strong>. Reach out anytime!
+
+            <p className="flex items-center space-x-2">
+              <MapPin size={20} className="text-gray-400 hover:text-yellow-400 transition" />
+              <span className="font-semibold">Address:</span>
+              <span>12/3 Flavor Street, Foodville</span>
             </p>
+
+            <p className="flex items-center space-x-2">
+              <Phone size={20} className="text-gray-400 hover:text-yellow-400 transition" />
+              <span className="font-semibold" > Phone: </span>
+              <span> +91 9876543210 </span>
+            </p>
+
+            <p className="flex items-center space-x-2" >
+              <Mail size={20} className="text-gray-400 hover:text-yellow-400 transition" />
+              <span className="font-semibold" > Email: </span>
+              <span> support@cravio.com </span>
+            </p>
+
+            <p>
+              We’re available <span className="font-semibold">Mon to Sat</span>, <span className="font-semibold">9:00 AM – 9:00 PM</span>. Reach out anytime!
+            </p>
+
           </div>
+
 
           {/* Contact Form */}
           <form className="space-y-3">
@@ -54,6 +75,7 @@ const Contact = () => {
               Send Message
             </button>
           </form>
+
         </div>
       </div>
     </div>

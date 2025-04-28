@@ -1,7 +1,7 @@
 import React from 'react'
 import { LOGO_URL } from '../../utils/constant' 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import useOnlineStatus from '../../utils/useOnlineStatus';
 import { useSelector } from 'react-redux';
 // import UserContext from '../../utils/UserContext';
@@ -23,17 +23,20 @@ const Header = () => {
   // selector used to subscribe to the store  
   const cartItems = useSelector(store => store?.cart?.items) ;
 
-  console.log("cartItems ",cartItems);
 
   return (
     <div className='header sticky top-0 z-50 flex items-center justify-between px-4 md:px-8 py-4 shadow-md bg-gradient-to-r from-white to-gray-50 '>
-      <div className='logo w-16 md:w-24 lg:w-24'>
-        <img
-          src={LOGO_URL}
-          className='w-full h-8 md:h-10 object-contain'
-          alt='Logo'
-        />
-      </div>
+      <div className="flex items-center space-x-1">
+        <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden">
+          <img
+            src={LOGO_URL}
+            alt="Logo"
+            className="w-full h-full object-cover"
+          />
+        </div>
+  <span className="text-xl md:text-2xl font-bold text-gray-700">Cravio</span>
+</div>
+
       
       {/* Hamburger Menu Button - Only visible on small screens */}
       <button
@@ -65,20 +68,51 @@ const Header = () => {
         
         <ul className='flex flex-col lg:flex-row items-start lg:items-center pt-16 lg:pt-0 px-6 lg:px-0 space-y-4 lg:space-y-0 lg:space-x-6 xl:space-x-10 text-base lg:text-lg font-semibold text-gray-700'>
           <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
-            <Link to="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-          </li>
-          <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
-            <Link to="/about" onClick={() => setMobileMenuOpen(false)}>About</Link>
-          </li>
-          <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
-            <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>Contact Us</Link>
+
+            <NavLink to="/" onClick={() => setMobileMenuOpen(false)}
+                className={({isActive}) =>
+                                        `block py-2 pr-4 pl-3 duration-200 ${isActive? "text-amber-500" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-amber-500 lg:p-0`
+                          }
+            >
+              Home
+
+            </NavLink>
           </li>
 
           <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
-              <Link 
+
+            <NavLink to="/about" onClick={() => setMobileMenuOpen(false)}
+              className={({isActive}) =>
+                `block py-2 pr-4 pl-3 duration-200 ${isActive? "text-amber-500" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-amber-500 lg:p-0`
+              }
+
+            >
+              About
+              
+            </NavLink>
+          </li>
+
+          <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
+
+            <NavLink to="/contact" onClick={() => setMobileMenuOpen(false)}
+                  className={({isActive}) =>
+                    `block py-2 pr-4 pl-3 duration-200 ${isActive? "text-amber-500" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-amber-500 lg:p-0`
+                  }
+
+            >
+              Contact Us
+
+            </NavLink>
+          </li>
+
+          <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
+              <NavLink 
                 to="/cart" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="relative inline-flex items-center"
+                className={({ isActive }) =>
+                  `relative inline-flex items-center  py-2 pr-4 pl-3 duration-200 ${isActive ? "text-amber-500" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-amber-500 lg:p-0`
+                }
+                
               >
                 Cart
                 {cartItems?.length > 0 && (
@@ -86,12 +120,22 @@ const Header = () => {
                     {cartItems.length}
                   </span>
                 )}
-              </Link>
+              </NavLink>
 
           </li>
 
           <li className='w-full lg:w-auto hover:text-amber-500 transition cursor-pointer'>
-            <Link to="/grocery" onClick={() => setMobileMenuOpen(false)}>Grocery</Link>
+
+            <NavLink to="/grocery" onClick={() => setMobileMenuOpen(false)}
+
+              className={({isActive}) =>
+                `block py-2 pr-4 pl-3 duration-200 ${isActive? "text-amber-500" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-amber-500 lg:p-0`
+              }
+             
+            >
+              Grocery
+              
+            </NavLink>
           </li>
           <li className='w-full lg:w-auto'>
             Online Status: {onlineStatus ? '🟢' : '🔴'}

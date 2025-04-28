@@ -23,7 +23,6 @@ const ItemList = ({ items }) => {
     <div className="space-y-6">
       {items.map((item, index) => {
 
-        console.log("item",item)
         const info = item?.card?.info;
         const price = info?.price || info?.defaultPrice || 0;
         const imgId = info?.imageId;
@@ -31,6 +30,7 @@ const ItemList = ({ items }) => {
         
         return (
           <div
+            data-testid = "foodItems"
             key={info?.id || index}
             className="flex flex-col sm:flex-row gap-4 p-4 border-b border-gray-100 last:border-0"
           >

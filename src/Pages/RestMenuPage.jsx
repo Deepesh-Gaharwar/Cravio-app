@@ -8,7 +8,6 @@ const RestMenuPage = () => {
   const { resId } = useParams();
   const resInfo = useRestMenuPage(resId); // custom hook for fetching the data
 
-  console.log("resInfo", resInfo);
 
   // Early loading state
 
@@ -20,7 +19,9 @@ const RestMenuPage = () => {
    
   const infoCard = resInfo.cards.find(
     (card) => card?.card?.card?.info
-  )?.card?.card?.info;
+  )?.card?.card?.info;  // gives us an object of cards
+
+  console.log(infoCard)
 
   const name = infoCard?.name || "Restaurant";
   const cuisines = infoCard?.cuisines || [];
@@ -34,7 +35,7 @@ const RestMenuPage = () => {
 
   const itemCards = regularCards.filter(
     (item) => item?.card?.card?.itemCards
-  );
+  ); // gives us an array of itemCards
 
   return (
     <div className="p-6 max-w-6xl mx-auto bg-[#f9f9f9] min-h-screen rounded">
