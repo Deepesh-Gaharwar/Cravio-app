@@ -8,17 +8,17 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyA3OR0dRHSk7rnqviN0yIpMcQt3y9fag7Q",
-    authDomain: "foodie-app-6b109.firebaseapp.com",
-    projectId: "foodie-app-6b109",
-    storageBucket: "foodie-app-6b109.firebasestorage.app",
-    messagingSenderId: "781917899809",
-    appId: "1:781917899809:web:f2d4a9649b3a473700e760"
+    apiKey: import.meta.env.VITE_API_KEY ,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN ,
+    projectId: import.meta.env.VITE_PROJECT_ID ,
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET ,
+    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID ,
+    appId: import.meta.env.VITE_APP_ID
   };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(); // helps to register the user
+export const auth = getAuth(app); // helps to register the user
 export const db = getFirestore(app);
 export default app;
