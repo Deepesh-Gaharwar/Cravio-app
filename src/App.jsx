@@ -1,4 +1,4 @@
-import React,{lazy, Suspense} from "react";
+import React,{lazy, Suspense, useEffect} from "react";
 import Body from "./Components/Body/Body";
 import { createBrowserRouter } from "react-router-dom";
 import About from "./Pages/About";
@@ -10,18 +10,39 @@ import RestMenuPage from "./Pages/RestMenuPage";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import Cart from "./Pages/Cart";
+import { ToastContainer } from "react-toastify";
+import Login from "./Components/Login/Login";
+import Register from "./Components/Register/Register";
+import Profile from "./Components/Profile/Profile";
+import { useState } from "react";
+import { auth } from "./utils/firebase";
+
+
  
 // lazy loading 
  const Grocery = lazy( () => import("./Components/Grocery/Grocery"));  // dynamic import 
 
 
 const App = () => { 
+   
+  const [,setUser] = useState();
+
+  useEffect ( () => {
+    auth.onAuthStateChanged ( (user) => {
+       
+      setUser(user);
+    });
+
+  }, []) ;
+
   return (
 
    <Provider store={appStore} >
       <div className="app ">
 
         <Layout />
+
+        <ToastContainer position="top-right" autoClose={3000} />
 
       </div>
 
@@ -63,6 +84,17 @@ const appRouter = createBrowserRouter([
         path : "/cart",
         element:  <Cart /> 
       },
+      {
+        path : "/login",
+        element : <Login />
+      },{
+        path : "/register",
+        element : <Register />
+      },
+      {
+        path : "/profile",
+        element : <Profile />
+      }
     ],
 
     errorElement : <Error /> 

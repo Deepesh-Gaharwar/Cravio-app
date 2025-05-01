@@ -1,6 +1,10 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const AddToCartButton = ({ item, handleAddItem, handleRemoveItem }) => {
+  const cartItem = useSelector(store => store.cart.items);
+  // const filterCartItem = cartItem.filter((item) => item.item.id === item.id)
+
 
   return (
     <button
@@ -24,7 +28,7 @@ const AddToCartButton = ({ item, handleAddItem, handleRemoveItem }) => {
           handleAddItem(item);
         }}
       >
-        ADD
+        {/* {store.length > 0 ? store.length : "ADD" } */}
       </span>
       
         <span 

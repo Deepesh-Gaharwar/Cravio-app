@@ -9,8 +9,9 @@ const ItemList = ({ items }) => {
   const dispatch = useDispatch();
 
   const handleAddItem = (item) => {
+    // console.log(item.card.info)
     // Dispatch an action
-    dispatch(addItem(item));
+    dispatch(addItem(item.card.info));
    
   }
 
