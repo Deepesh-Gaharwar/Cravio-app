@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { auth, db } from '../../utils/firebase';
 import { setDoc, doc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
+import { Loader } from 'lucide-react';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -10,8 +11,12 @@ const Register = () => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
 
+  const [loading, setLoading] = useState(false);
+
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -37,11 +42,13 @@ const Register = () => {
         position: 'bottom-center',
         className: 'bg-red-600 text-white rounded-md shadow-md',
       });
+    } finally{
+       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-3">
       <form
         onSubmit={handleRegister}
         className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-xl"
@@ -96,9 +103,14 @@ const Register = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold"
+          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold flex items-center justify-center min-h-10"
+          disabled={loading}
         >
-          Sign Up
+          {loading ? (
+            <Loader className="animate-spin w-5 h-5 text-white" />
+          ) : (
+            "Sign Up"
+          )}
         </button>
 
         <p className="text-sm text-center text-gray-600 mt-4">

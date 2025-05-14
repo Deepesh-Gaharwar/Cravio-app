@@ -1,26 +1,27 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearCart, addItem, removeItem } from '../utils/cartSlice';
-import { Trash2 } from 'lucide-react';
+import { CreditCard, Trash2 } from 'lucide-react';
 import { CDN_URL } from '../utils/constant';
 import AddToCartButton from '../Components/AddToCartButton/AddToCartButton';
+import { useNavigate } from 'react-router-dom';
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
   
   const handleAddItem = () => {
-    dispatch(addItem(item));
+    dispatch(addItem(item.item));
   };
   
   const handleRemoveItem = () => {
-    dispatch(removeItem(item));
+    dispatch(removeItem(item.item));
   };
   
   // Extract item details
-  const info = item?.card?.info || item;
+  const info = item.item;
   const name = info?.name || '';
   const description = info?.description || '';
-  const price = info?.price || info?.defaultPrice || 0;
+  const price = info?.price * item.quantity || info?.defaultPrice || 0;
   const imageId = info?.imageId;
   const imgURL = imageId ? `${CDN_URL}/${imageId}` : null;
 
@@ -41,7 +42,7 @@ const CartItem = ({ item }) => {
                     />
                     
                     <AddToCartButton 
-                        item={item} 
+                        item={item.item} 
                         handleAddItem={handleAddItem} 
                         handleRemoveItem={handleRemoveItem} 
                     />
@@ -56,6 +57,26 @@ const CartItem = ({ item }) => {
 const Cart = () => {
   const cartItems = useSelector((store) => store.cart.items);
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+  
+
+  const handleProceedToPayment = () => {
+    if (cartItems.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+
+    // Save the order temporarily
+    localStorage.setItem("lastOrder", JSON.stringify(cartItems));
+
+    // Clear the cart
+    dispatch(clearCart());
+
+    // Navigate to the thank-you page
+    navigate("/thank-you");
+  };
+
   
   const handleClearCart = () => {
     dispatch(clearCart());
@@ -63,10 +84,9 @@ const Cart = () => {
   
   // Calculate total price
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => {
-      const info = item?.card?.info || item;
-      const price = info?.price || info?.defaultPrice || 0;
-      return total + (price/100 || price);
+    return cartItems.reduce((total, cartItem) => {
+      const price = cartItem.item.price || cartItem.item.defaultPrice || 0;
+      return total + (price * cartItem.quantity);
     }, 0);
   };
   
@@ -88,22 +108,32 @@ const Cart = () => {
             <div className="bg-white p-4 sm:p-5 rounded-lg mb-4 shadow-sm">
               <div className="flex justify-between items-center mb-2 text-sm sm:text-base">
                 <span className="text-gray-700 font-medium">Items ({cartItems.length})</span>
-                <span className="font-semibold">₹{calculateTotal().toFixed(2)}</span>
+                <span className="font-semibold">₹{(calculateTotal() / 100).toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center text-base sm:text-lg font-bold border-t pt-3 mt-2">
                 <span>Total Amount</span>
-                <span>₹{calculateTotal().toFixed(2)}</span>
+                <span>₹{(calculateTotal() / 100).toFixed(2)}</span>
               </div>
             </div>
             
-            {/* Clear cart button */}
+            {/* Clear cart button and payment button*/}
+            <div className='space-y-1'>
             <button 
-              className="flex items-center justify-center gap-2 w-full p-3 sm:p-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-200 shadow-sm"
+              className="flex items-center justify-center gap-2 w-full p-3 sm:p-4 bg-gray-800 text-white font-semibold rounded-lg hover:bg-gray-700 transition duration-200 shadow-sm cursor-pointer"
+              onClick={handleProceedToPayment}
+            >
+              
+              <CreditCard size={18} className="flex-shrink-0" />
+              <span> Proceed to Payment</span>
+            </button>
+            <button 
+              className="flex items-center justify-center gap-2 w-full p-3 sm:p-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-200 shadow-sm cursor-pointer"
               onClick={handleClearCart}
             >
-              <Trash2 size={18} className="flex-shrink-0" />
+              <Trash2 size={18} className="flex-shrink-0"/>
               <span>Clear Cart</span>
             </button>
+            </div>
           </>
         ) : (
           <div className="text-center p-6 sm:p-10 bg-gray-50 rounded-lg shadow-sm">

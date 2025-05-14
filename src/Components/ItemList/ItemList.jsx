@@ -1,23 +1,37 @@
 import React from "react";
 import { IMAGE_URL } from "../../utils/constant";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItem } from "../../utils/cartSlice";
 import AddToCartButton from "../AddToCartButton/AddToCartButton";
+import {useNavigate } from "react-router-dom";
 
 const ItemList = ({ items }) => {
 
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
+  const user = useSelector((state) => state.auth.user);
+
   const handleAddItem = (item) => {
-    // console.log(item.card.info)
-    // Dispatch an action
-    dispatch(addItem(item.card.info));
-   
+
+    if (!user) {
+    navigate("/register");
+  } else {
+  
+  // dispatch an action
+    dispatch(addItem(item));
+  }
   }
 
   const handleRemoveItem = (item) => {
+    if (!user) {
+    navigate("/register");
+  } else {
     // dispatch an action
     dispatch(removeItem(item));
+  }
+    
   }
   
   return (
@@ -60,7 +74,7 @@ const ItemList = ({ items }) => {
                     />
                     
                     <AddToCartButton 
-                        item={item} 
+                        item={item.card.info} 
                         handleAddItem={handleAddItem} 
                         handleRemoveItem={handleRemoveItem} 
                     />

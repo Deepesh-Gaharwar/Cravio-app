@@ -21,7 +21,7 @@ const RestMenuPage = () => {
     (card) => card?.card?.card?.info
   )?.card?.card?.info;  // gives us an object of cards
 
-  console.log(infoCard)
+  // console.log(infoCard)
 
   const name = infoCard?.name || "Restaurant";
   const cuisines = infoCard?.cuisines || [];

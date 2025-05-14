@@ -2,9 +2,13 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const AddToCartButton = ({ item, handleAddItem, handleRemoveItem }) => {
-  const cartItem = useSelector(store => store.cart.items);
-  // const filterCartItem = cartItem.filter((item) => item.item.id === item.id)
+  const cartItems = useSelector(store => store.cart.items);
+  
+ // check if item is already in cart and get its quantity
 
+ const cartItem = cartItems.find(ci => ci.item.id === item.id) ;
+ 
+ const quantity = cartItem ? cartItem.quantity : 0 ;
 
   return (
     <button
@@ -22,13 +26,9 @@ const AddToCartButton = ({ item, handleAddItem, handleRemoveItem }) => {
         </span>
       
       <span 
-        className="px-3 py-1.5 font-medium cursor-pointer"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleAddItem(item);
-        }}
+        className="px-3 py-1.5 font-medium cursor-default"
       >
-        {/* {store.length > 0 ? store.length : "ADD" } */}
+        {quantity > 0 ? quantity : 'ADD'}
       </span>
       
         <span 

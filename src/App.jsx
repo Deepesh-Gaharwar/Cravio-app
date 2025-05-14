@@ -7,47 +7,52 @@ import Error from "./Pages/Error";
 import Layout from "./Layout/Layout";
 import RestMenuPage from "./Pages/RestMenuPage";
 // import Grocery from "./Components/Grocery/Grocery";
-import { Provider } from "react-redux";
-import appStore from "./utils/appStore";
+import { useDispatch } from "react-redux";
 import Cart from "./Pages/Cart";
 import { ToastContainer } from "react-toastify";
 import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
-import Profile from "./Components/Profile/Profile";
-import { useState } from "react";
 import { auth } from "./utils/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { setUser,logoutUser } from "./utils/authSlice";
+import ScrollToTop from "./utils/ScrollToTop";
+import { useLocation } from "react-router-dom";
+import ThankYou from "./Pages/ThankYou/ThankYou";
 
 
  
 // lazy loading 
  const Grocery = lazy( () => import("./Components/Grocery/Grocery"));  // dynamic import 
 
-
 const App = () => { 
+
+  const dispatch = useDispatch();
+
+  const location = useLocation();
    
-  const [,setUser] = useState();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if(user){
+        dispatch(setUser(user));
+      }else{
+        dispatch(logoutUser());
+      }
+    }) ;
 
-  useEffect ( () => {
-    auth.onAuthStateChanged ( (user) => {
-       
-      setUser(user);
-    });
-
-  }, []) ;
+    return () => unsubscribe();
+  }, [dispatch]) ;
 
   return (
 
-   <Provider store={appStore} >
-      <div className="app ">
+    <div className="app ">  
+         <ScrollToTop />  
 
-        <Layout />
+          <Layout />
 
-        <ToastContainer position="top-right" autoClose={3000} />
+          <ToastContainer position="top-right" autoClose={3000} />
 
-      </div>
-
-    </Provider>
-  )
+    </div>
+  );
 }
 
 
@@ -74,7 +79,10 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/grocery",
-        element: <Suspense fallback={<h1>Loading...</h1>}     >   <Grocery />  </Suspense>
+        element: (
+           <Suspense fallback={<h1>Loading...</h1>} >   <Grocery />  
+           </Suspense>
+        ),
       },
       {
         path : "/restaurants/:resId",
@@ -87,19 +95,22 @@ const appRouter = createBrowserRouter([
       {
         path : "/login",
         element : <Login />
-      },{
+      },
+      {
         path : "/register",
         element : <Register />
       },
       {
-        path : "/profile",
-        element : <Profile />
+        path : "/thank-you",
+        element : <ThankYou />
       }
+      
     ],
 
     errorElement : <Error /> 
   },
   
 ]);
+
 
 export default appRouter;
