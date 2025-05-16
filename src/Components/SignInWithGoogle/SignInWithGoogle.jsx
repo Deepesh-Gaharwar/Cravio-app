@@ -41,7 +41,8 @@ const SignInWithGoogle = () => {
         });
       } else {
         // User exists, no need to overwrite their data
-        toast.success("Welcome back!", {
+        const firstName = user.displayName?.split(" ")[0] || "User";
+        toast.success(`Welcome back, ${firstName}!`, {
           position: "top-center",
         });
       }

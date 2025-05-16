@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { UserCircle ,MoreVertical } from 'lucide-react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { UserCircle, MoreVertical } from 'lucide-react';
 import { auth } from '../../utils/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import useOnlineStatus from '../../utils/useOnlineStatus';
 import { LOGO_URL } from '../../utils/constant';
+import { logoutUser } from '../../utils/authSlice';
+import { clearCart } from '../../utils/cartSlice';
+import { toast } from 'react-toastify';
 
 const Header = () => {
   const [, setBtnNameReact] = useState('Login');
@@ -13,6 +16,8 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [user, setUser] = useState(null);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onlineStatus = useOnlineStatus();
   const cartItems = useSelector(store => store?.cart?.items);
 
@@ -32,12 +37,23 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await signOut(auth);                 // Firebase sign out
+      dispatch(logoutUser());             // Clear user from Redux
+      dispatch(clearCart());              // Clear cart from Redux and persisted storage
       setBtnNameReact('Login');
       setShowDropdown(false);
       setMobileMenuOpen(false);
+      navigate('/');                      // Redirect to home
+      toast.success('User logged out successfully!', {
+              position: 'top-center',
+              className: 'bg-green-600 text-white rounded-md shadow-md',
+            }); // Optional feedback
     } catch (err) {
-      console.error('Logout error:', err);
+      console.error(err.message);
+      toast.error(err.message, {
+              position: 'bottom-center',
+              className: 'bg-red-600 text-white rounded-md shadow-md',
+            });
     }
   };
 
@@ -64,7 +80,6 @@ const Header = () => {
 
       {/* Navigation */}
       <div className={`nav-items fixed top-0 right-0 h-screen w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out rounded-l-2xl lg:static lg:h-auto lg:w-auto lg:bg-transparent lg:shadow-none lg:transform-none ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}`}>
-        {/* Close menu on mobile */}
         <button
           className='lg:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-700 cursor-pointer'
           onClick={() => setMobileMenuOpen(false)}
@@ -91,7 +106,6 @@ const Header = () => {
             </NavLink>
           </li>
           <li><NavLink to="/grocery" className={({ isActive }) => `block py-2 px-3 duration-200 ${isActive ? 'text-amber-500' : 'text-gray-700'} hover:text-amber-500`} onClick={() => setMobileMenuOpen(false)}>Grocery</NavLink></li>
-
           <li className='py-2 px-3 hover:text-amber-500'>Online Status: {onlineStatus ? '🟢' : '🔴'}</li>
 
           {/* Mobile Logout */}
@@ -106,7 +120,7 @@ const Header = () => {
             </li>
           )}
 
-          {/* More button dropdown for desktop */}
+          {/* Desktop More Button */}
           <li className="hidden lg:block relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
@@ -116,41 +130,62 @@ const Header = () => {
               <MoreVertical className="w-6 h-6 text-gray-700" />
             </button>
 
-            {/* Dropdown */}
-{showDropdown && user && (
-  <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg z-50 text-gray-800 p-6 text-center">
-    {/* Profile Image Centered */}
-    {user.photoURL ? (
-      <img
-        src={user.photoURL}
-        alt="User"
-        className="w-20 h-20 rounded-full object-cover mx-auto mb-4"
-      />
-    ) : (
-      <UserCircle className="w-20 h-20 text-gray-500 mx-auto mb-4" />
-    )}
+            {/* Dropdown - when user is logged in */}
+            {showDropdown && user && (
+              <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg z-50 text-gray-800 p-6 text-center">
+                {user.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt="User"
+                    className="w-20 h-20 rounded-full object-cover mx-auto mb-4"
+                  />
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                    <UserCircle className="w-16 h-16 text-gray-500" />
+                  </div>
+                )}
 
-    {/* Username */}
-    <p className="text-sm font-semibold mb-1">
-      Username : <span className="font-normal">{user.displayName || "N/A"}</span>
-    </p>
+                <p className="text-sm font-semibold mb-1">
+                  Username: <span className="font-normal">{user.displayName || "N/A"}</span>
+                </p>
 
-    {/* Email */}
-    <p className="text-sm font-semibold mb-4">
-      Email : <span className="font-normal">{user.email}</span>
-    </p>
+                <p className="text-sm font-semibold mb-4">
+                  Email: <span className="font-normal">{user.email}</span>
+                </p>
 
-    {/* Logout Button */}
-    <button
-                className="w-full px-4 py-2 bg-red-500 text-white font-bold rounded-full shadow hover:bg-red-600 transition duration-200 ease-in-out cursor-pointer"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-  </div>
-)}
+                <button
+                  className="w-full px-4 py-2 bg-red-500 text-white font-bold rounded-full shadow hover:bg-red-600 transition duration-200 ease-in-out cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
 
+            {/* Dropdown - when user is NOT logged in */}
+            {showDropdown && !user && (
+              <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg z-50 text-gray-800 p-6 text-center">
+                <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                  <UserCircle className="w-16 h-16 text-gray-500" />
+                </div>
+
+                <p className="text-sm font-semibold mb-2">You are not logged in !</p>
+                <p className="text-xs text-gray-500 mb-4">Please login or register to continue</p>
+
+                <button
+                  className="w-full px-4 py-2 bg-blue-500 text-white font-bold rounded-full shadow hover:bg-blue-600 transition duration-200 ease-in-out cursor-pointer"
+                  onClick={() => {
+                    setShowDropdown(false);
+                    navigate('/login');
+                  }}
+                >
+                  Login / Register
+                </button>
+              </div>
+            )}
           </li>
+
+
         </ul>
       </div>
     </div>

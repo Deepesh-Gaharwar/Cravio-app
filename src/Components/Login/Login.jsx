@@ -18,13 +18,18 @@ const Login = () => {
     
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user;
+
       setLoading(false);
-      
-      toast.success('User logged in successfully!', {
+
+      const firstName = user.displayName?.split(' ')[0] || 'User';
+
+      toast.success(`Welcome back, ${firstName}!`, {
         position: 'top-center',
         className: 'bg-green-600 text-white rounded-md shadow-md',
       });
+
       
       // Redirect after slight delay for user feedback
       setTimeout(() => {
