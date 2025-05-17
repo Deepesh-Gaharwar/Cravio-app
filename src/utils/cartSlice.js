@@ -4,14 +4,12 @@ const cartSlice = createSlice({
   name: "cart",
 
   initialState: {
-    items: [], // [{ item: {...}, quantity: 2 }]
+    items: [],
   },
 
   reducers: {
     addItem: (state, action) => {
-       // console.log("Items:", JSON.parse(JSON.stringify(state.items)));
-      
-     // console.log(action.payload) ; 
+        
       const id = action.payload.id;
       const existingItem = state.items.find(item => item.item.id === id);
 
@@ -27,7 +25,6 @@ const cartSlice = createSlice({
 
       const existing = state.items.find(i => i.item.id === item.id) ; 
 
-     // console.log(existing) ;
 
       if(existing && existing.quantity > 1){
         existing.quantity -= 1;

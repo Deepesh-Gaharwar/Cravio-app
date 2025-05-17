@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import FoodTypeIcon from '../../Components/FoodTypeIcon/FoodTypeIcon'; 
 
 const ThankYou = () => {
   const [order, setOrder] = useState([]);
@@ -10,20 +11,18 @@ const ThankYou = () => {
   useEffect(() => {
     try {
       const savedOrder = JSON.parse(localStorage.getItem("lastOrder") || "[]");
-     // console.log("Saved order:", savedOrder);
 
       if (savedOrder && savedOrder.length > 0) {
         setOrder(savedOrder);
         
-        // Calculate total price using the appropriate price field for each item
+        // total price using the appropriate price field for each item
         const total = savedOrder.reduce((acc, orderItem) => {
-          // Try to get price in this priority: finalPrice -> price -> defaultPrice
+          // price in this priority: finalPrice -> price -> defaultPrice
           const itemPrice = getItemPrice(orderItem.item);
           const quantity = Number(orderItem.quantity) || 0;
           return acc + (itemPrice * quantity);
         }, 0);
         
-      //  console.log("Calculated total:", total);
         setTotalPrice(total);
       }
     } catch (error) {
@@ -37,7 +36,7 @@ const ThankYou = () => {
     return `₹${(price / 100).toFixed(2)}`;
   };
 
-  // Get item price based on priority: finalPrice -> price -> defaultPrice
+  // Item price based on priority: finalPrice -> price -> defaultPrice
   const getItemPrice = (item) => {
     if (item.finalPrice) return item.finalPrice;
     if (item.price) return item.price;
@@ -45,7 +44,7 @@ const ThankYou = () => {
     return 0;
   };
 
-  // Get the discount percentage if there's a price and finalPrice
+  // Discount percentage if there's a price and finalPrice
   const getDiscountPercentage = (item) => {
     if (item.price && item.finalPrice && item.price > item.finalPrice) {
       const discount = ((item.price - item.finalPrice) / item.price) * 100;
@@ -54,26 +53,26 @@ const ThankYou = () => {
     return null;
   };
 
-  // Determine if an item is vegetarian
+  // if an item is vegetarian
   const isVegetarian = (item) => {
     return item.isVeg === 1 || 
            (item.itemAttribute && item.itemAttribute.vegClassifier === 'VEG');
   };
 
   return (
-    <div className="p-5 max-w-4xl mx-auto">
+    <div className="px-4 py-6 sm:px-6 md:px-10 max-w-5xl mx-auto">
       <div className="text-center mb-8">
         <CheckCircle className="mx-auto text-green-600 mb-4" size={64} />
-        <h2 className="text-3xl font-bold text-green-600 mb-4">Thank You for Your Order!</h2>
-        <p className="text-gray-600 mb-6">We have received your order and are preparing it now.</p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-green-600 mb-2">Thank You for Your Order!</h2>
+        <p className="text-gray-600 text-sm sm:text-base">We have received your order and are preparing it now.</p>
       </div>
 
       {order.length > 0 ? (
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-xl font-semibold mb-4 border-b pb-2 text-center">Order Summary</h3>
-          
+        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+          <h3 className="text-lg sm:text-xl font-semibold mb-4 border-b pb-2 text-center">Order Summary</h3>
+
           <div className="overflow-x-auto">
-            <table className="min-w-full table-auto">
+            <table className="min-w-full text-sm sm:text-base">
               <thead>
                 <tr className="bg-gray-50">
                   <th className="py-3 px-4 text-left text-gray-600 font-medium">Item Name</th>
@@ -87,16 +86,15 @@ const ThankYou = () => {
                   const price = getItemPrice(orderItem.item);
                   const itemTotal = price * orderItem.quantity;
                   const discountPercentage = getDiscountPercentage(orderItem.item);
+                  const isVeg = isVegetarian(orderItem.item);
                   
                   return (
                     <tr key={index} className="border-b hover:bg-gray-50">
                       <td className="py-3 px-4 text-left">
                         <div className="flex items-center">
-                          {isVegetarian(orderItem.item) ? (
-                            <span className="inline-block w-3 h-3 bg-green-600 rounded-full mr-2"></span>
-                          ) : (
-                            <span className="inline-block w-3 h-3 bg-red-600 rounded-full mr-2"></span>
-                          )}
+                          <div className="mr-2">
+                            <FoodTypeIcon isVeg={isVeg} size={14} />
+                          </div>
                           <span>{orderItem.item.name}</span>
                         </div>
                       </td>
@@ -131,12 +129,12 @@ const ThankYou = () => {
               </tfoot>
             </table>
           </div>
-          
-          <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-100">
-            <p className="text-green-700 font-medium text-center">Your order has been confirmed. You will receive a confirmation email shortly.</p>
+
+          <div className="mt-6 p-4 sm:p-6 bg-green-50 rounded-lg border border-green-100 text-center">
+            <p className="text-green-700 font-medium">Your order has been confirmed. You will receive a confirmation email shortly.</p>
             <div className="mt-4 flex justify-center">
               <button 
-                className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg font-medium transition-colors"
+                className="bg-green-600 hover:bg-green-700 text-white py-2 px-5 sm:px-6 rounded-lg font-medium transition-colors cursor-pointer"
                 onClick={() => navigate('/')}
               >
                 Continue Shopping
@@ -146,9 +144,9 @@ const ThankYou = () => {
         </div>
       ) : (
         <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <p className="text-gray-600">No order data found. Please check your order history or contact customer support.</p>
+          <p className="text-gray-600 text-sm sm:text-base">No order data found. Please check your order history or contact customer support.</p>
           <button 
-            className="mt-4 bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg font-medium transition-colors"
+            className="mt-4 bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg font-medium transition-colors cursor-pointer"
             onClick={() => navigate('/')}
           >
             Go to Home

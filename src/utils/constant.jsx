@@ -12,4 +12,3 @@ export const MENU_API_URL = (resId) =>
 export const GIT_HUB_API_URL = "https://api.github.com/users/";
 
 export const IMAGE_URL = "https://media-assets.swiggy.com/swiggy/image/upload/" ;
-

@@ -19,7 +19,7 @@ const useOnlineStatus = () => {
     },[]);
 
 
-    return onlineStatus; // boolean value
+    return onlineStatus; 
 
 }
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../utils/firebase';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import SignInWithGoogle from '../SignInWithGoogle/SignInWithGoogle';
 import { Loader } from 'lucide-react';
 
@@ -30,8 +30,6 @@ const Login = () => {
         className: 'bg-green-600 text-white rounded-md shadow-md',
       });
 
-      
-      // Redirect after slight delay for user feedback
       setTimeout(() => {
         navigate("/");
       }, 1000);

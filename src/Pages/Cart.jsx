@@ -5,6 +5,7 @@ import { CreditCard, Trash2 } from 'lucide-react';
 import { CDN_URL } from '../utils/constant';
 import AddToCartButton from '../Components/AddToCartButton/AddToCartButton';
 import { useNavigate } from 'react-router-dom';
+import FoodTypeIcon from '../Components/FoodTypeIcon/FoodTypeIcon';
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
@@ -17,39 +18,40 @@ const CartItem = ({ item }) => {
     dispatch(removeItem(item.item));
   };
   
-  // Extract item details
   const info = item.item;
   const name = info?.name || '';
   const description = info?.description || '';
   const price = info?.price * item.quantity || info?.defaultPrice || 0;
   const imageId = info?.imageId;
   const imgURL = imageId ? `${CDN_URL}/${imageId}` : null;
+  const isVeg = info?.isVeg === 1 || info?.itemAttribute?.vegClassifier === "VEG";
 
   return (
     <div className="flex justify-between items-start py-6 px-4 border-b border-gray-100 last:border-0">
       <div className="flex flex-col text-left pr-4 flex-1">
-        <h3 className="text-lg font-medium text-gray-900">{name}</h3>
+        <div className="flex items-center gap-2">
+          <FoodTypeIcon isVeg={isVeg} size={16} />
+          <h3 className="text-lg font-medium text-gray-900">{name}</h3>
+        </div>
         <p className="text-sm text-gray-600 mt-1">{description || `Serves 1 | ${name}`}</p>
         <p className="text-base font-medium text-green-600 mt-3">₹{price/100 || price}</p>
       </div>
       
-        {imgURL && (
-                <div className="relative flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 group">
-                    <img
-                      src={imgURL}
-                      alt={name}
-                      className="w-full h-full object-cover rounded-lg shadow-sm transition-all duration-300 group-hover:shadow-md"
-                    />
-                    
-                    <AddToCartButton 
-                        item={item.item} 
-                        handleAddItem={handleAddItem} 
-                        handleRemoveItem={handleRemoveItem} 
-                    />
-                </div>    
-        )}                     
-
-      
+      {imgURL && (
+        <div className="relative flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 group">
+          <img
+            src={imgURL}
+            alt={name}
+            className="w-full h-full object-cover rounded-lg shadow-sm transition-all duration-300 group-hover:shadow-md"
+          />
+          
+          <AddToCartButton 
+            item={item.item} 
+            handleAddItem={handleAddItem} 
+            handleRemoveItem={handleRemoveItem} 
+          />
+        </div>    
+      )}                     
     </div>
   );
 };
@@ -60,7 +62,6 @@ const Cart = () => {
 
   const navigate = useNavigate();
   
-
   const handleProceedToPayment = () => {
     if (cartItems.length === 0) {
       alert("Your cart is empty.");
@@ -70,14 +71,11 @@ const Cart = () => {
     // Save the order temporarily
     localStorage.setItem("lastOrder", JSON.stringify(cartItems));
 
-    // Clear the cart
     dispatch(clearCart());
 
-    // Navigate to the thank-you page
     navigate("/thank-you");
   };
 
-  
   const handleClearCart = () => {
     dispatch(clearCart());
   };
@@ -118,21 +116,20 @@ const Cart = () => {
             
             {/* Clear cart button and payment button*/}
             <div className='space-y-1'>
-            <button 
-              className="flex items-center justify-center gap-2 w-full p-3 sm:p-4 bg-gray-800 text-white font-semibold rounded-lg hover:bg-gray-700 transition duration-200 shadow-sm cursor-pointer"
-              onClick={handleProceedToPayment}
-            >
-              
-              <CreditCard size={18} className="flex-shrink-0" />
-              <span> Proceed to Payment</span>
-            </button>
-            <button 
-              className="flex items-center justify-center gap-2 w-full p-3 sm:p-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-200 shadow-sm cursor-pointer"
-              onClick={handleClearCart}
-            >
-              <Trash2 size={18} className="flex-shrink-0"/>
-              <span>Clear Cart</span>
-            </button>
+              <button 
+                className="flex items-center justify-center gap-2 w-full p-3 sm:p-4 bg-gray-800 text-white font-semibold rounded-lg hover:bg-gray-700 transition duration-200 shadow-sm cursor-pointer"
+                onClick={handleProceedToPayment}
+              >
+                <CreditCard size={18} className="flex-shrink-0" />
+                <span> Proceed to Payment</span>
+              </button>
+              <button 
+                className="flex items-center justify-center gap-2 w-full p-3 sm:p-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-200 shadow-sm cursor-pointer"
+                onClick={handleClearCart}
+              >
+                <Trash2 size={18} className="flex-shrink-0"/>
+                <span>Clear Cart</span>
+              </button>
             </div>
           </>
         ) : (

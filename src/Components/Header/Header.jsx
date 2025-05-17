@@ -37,17 +37,18 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);                 // Firebase sign out
-      dispatch(logoutUser());             // Clear user from Redux
-      dispatch(clearCart());              // Clear cart from Redux and persisted storage
+      await signOut(auth);                 
+      dispatch(logoutUser());             
+      dispatch(clearCart());              
       setBtnNameReact('Login');
       setShowDropdown(false);
       setMobileMenuOpen(false);
-      navigate('/');                      // Redirect to home
-      toast.success('User logged out successfully!', {
+      navigate('/');                      
+      toast.success('Logged out successfully!', {
               position: 'top-center',
               className: 'bg-green-600 text-white rounded-md shadow-md',
-            }); // Optional feedback
+            }); 
+            
     } catch (err) {
       console.error(err.message);
       toast.error(err.message, {

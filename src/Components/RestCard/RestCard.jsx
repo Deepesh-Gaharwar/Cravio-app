@@ -2,9 +2,7 @@ import React from 'react';
 import { CDN_URL } from '../../utils/constant';
 
 const RestCard = ({resData}) => {
-   // destructuring / optional chanioning if possible in resData
-  
-  
+      
     const {
         name,
         avgRating,

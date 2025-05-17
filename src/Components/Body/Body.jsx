@@ -21,16 +21,14 @@ const Body = () => {
 
   const fetchData = async () => {
     try {
-      const data = await fetch(API_URL); // API URl
+      const data = await fetch(API_URL); 
       const json = await data.json();
-
-      // const restaurants = json?.data?.cards?.[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
 
       const cards = json?.data?.cards || [];
 
       const AllRestaurantsCards = cards.find(
         (card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants
-      ); // gives us an object of restaurants
+      ); 
 
       const restaurants =
         AllRestaurantsCards?.card?.card?.gridElements?.infoWithStyle
@@ -77,7 +75,8 @@ const Body = () => {
             onChange={(e) => {
               setSearchText(e.target.value);
             }}
-            // helps to searches using the enter key
+
+            
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 const filteredRest = listOfRest.filter((res) =>
@@ -110,22 +109,20 @@ const Body = () => {
         <button
           className="filter-btn m-[10px] cursor-pointer bg-green-400 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition duration-200"
           onClick={() => {
-            // filter logic here
+
+            
             const filteredList = listOfRest.filter(
-              (res) => res?.info?.avgRating > 4.5
+              (res) => res?.info?.avgRating > 4.0
             );
             
             setFilteredRest(filteredList);
             
           }}
         >
-          Top Rated Restaurants
+          Top Rated Restaurants (4.0+)
         </button>
       </div>
 
-      {/* bg-[#FFFAF0] => for body 
-          bg-gray-100 
-      */}
 
       <div className="rest-container flex flex-wrap justify-center bg-[#FFFAF0] gap-6 p-6  min-h-screen"> 
         {/* Restaurant card component*/}

@@ -6,7 +6,6 @@ import Contact from "./Pages/Contact";
 import Error from "./Pages/Error";
 import Layout from "./Layout/Layout";
 import RestMenuPage from "./Pages/RestMenuPage";
-// import Grocery from "./Components/Grocery/Grocery";
 import { useDispatch } from "react-redux";
 import Cart from "./Pages/Cart";
 import { ToastContainer } from "react-toastify";

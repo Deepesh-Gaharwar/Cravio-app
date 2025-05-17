@@ -7,7 +7,6 @@ const useRestMenuPage = (resId) => {
 
     const [resInfo, setResInfo] = useState(null);
 
-    // fetchData
 
     useEffect(() => {
 

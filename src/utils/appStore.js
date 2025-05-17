@@ -15,18 +15,15 @@ import {
 
 import storage from "redux-persist/lib/storage"
 
-// Step 1 : Create persist config
 const persistConfig = {
     key : "cart",
     storage,
 
 } ;
 
-// Step 2 : Wrap cartReducer with persistReducer
 const persistedCartReducer = persistReducer(persistConfig, cartReducer);
 
 
-// Step 3 : Create store
 const appStore = configureStore({
     reducer : {
        cart : persistedCartReducer,
@@ -41,6 +38,5 @@ const appStore = configureStore({
 });
 
 
-// Step 4 : Export both store and persistor
 export const persistor = persistStore(appStore) ;
 export default appStore;
