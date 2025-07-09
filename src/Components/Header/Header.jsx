@@ -142,7 +142,7 @@ const Header = () => {
             className="p-2 rounded-full hover:bg-gray-200 transition"
             aria-label="More options"
           >
-            <MoreVertical className="w-6 h-6 text-gray-700" />
+             {/* <MoreVertical className="w-6 h-6 text-gray-700" /> */}
           </button>
 
           {/* Dropdown - when user is logged in */}

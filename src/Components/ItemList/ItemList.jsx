@@ -1,30 +1,34 @@
 import React from "react";
 import { IMAGE_URL } from "../../utils/constant";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addItem, removeItem } from "../../utils/cartSlice";
 import AddToCartButton from "../AddToCartButton/AddToCartButton";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import FoodTypeIcon from "../FoodTypeIcon/FoodTypeIcon";
 
 const ItemList = ({ items }) => {
-  const navigate = useNavigate();
+ // const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
+ // const user = useSelector((state) => state.auth.user);
 
   const handleAddItem = (item) => {
-    if (!user) {
-      navigate("/register");
-    } else {
-      dispatch(addItem(item));
-    }
+
+    dispatch(addItem(item));
+    // if (!user) {
+    //   navigate("/register");
+    // } else {
+    //   dispatch(addItem(item));
+    // }
   };
 
   const handleRemoveItem = (item) => {
-    if (!user) {
-      navigate("/register");
-    } else {
-      dispatch(removeItem(item));
-    }
+    dispatch(removeItem(item));
+
+    // if (!user) {
+    //   navigate("/register");
+    // } else {
+    //   dispatch(removeItem(item));
+    // }
   };
 
   return (

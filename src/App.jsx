@@ -9,8 +9,8 @@ import RestMenuPage from "./Pages/RestMenuPage";
 import { useDispatch } from "react-redux";
 import Cart from "./Pages/Cart";
 import { ToastContainer } from "react-toastify";
-import Login from "./Components/Login/Login";
-import Register from "./Components/Register/Register";
+// import Login from "./Components/Login/Login";
+//import Register from "./Components/Register/Register";
 import { auth } from "./utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { setUser,logoutUser } from "./utils/authSlice";
@@ -91,14 +91,14 @@ const appRouter = createBrowserRouter([
         path : "/cart",
         element:  <Cart /> 
       },
-      {
-        path : "/login",
-        element : <Login />
-      },
-      {
-        path : "/register",
-        element : <Register />
-      },
+      // {
+      //   path : "/login",
+      //   element : <Login />
+      // },
+      // {
+      //   path : "/register",
+      //   element : <Register />
+      // },
       {
         path : "/thank-you",
         element : <ThankYou />
